@@ -16,7 +16,7 @@ make run TARGET=sw_emu                                       # run the software 
 For hardware emulation or hardware run, change sw_emu to hw_emu / hw . </br>
 For more details, see the https://github.com/Xilinx/Vitis_Libraries/tree/2020.2/vision/L3 
 
-## Develope outside the Vitis folder using letterbox as a template
+## Develope outside the default folder using letterbox as a template
 
 It requires modifiying paths used in Makefile. 
 
