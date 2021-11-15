@@ -5,9 +5,10 @@ Experiments for lab c
 
 ```shell
 git clone https://github.com/Xilinx/Vitis_Libraries/ 
+cd Vitis_Libraries                                           # enter the repository 
 git checkout 2020.2                                          # switch to proper version, e.g., Xilinx 2020.2 environment
-cd Vitis_Libraries/vision/L3/examples/letterbox/             # suppose we would like to try letterbox example 
-source vlib.sh                                               # the setting file for HLS course server 
+cd vision/L3/examples/letterbox/                             # suppose we would like to try letterbox example 
+source vlib.sh                                               # the setting file we provided for HLS course server 
 make host xclbin TARGET=sw_emu                               # combpile for Software emulation 
 make run TARGET=sw_emu                                       # run the software emulation 
 ```
