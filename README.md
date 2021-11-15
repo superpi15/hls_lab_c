@@ -1,7 +1,7 @@
 # hls_lab_c
 Experiments for lab c 
 
-## Trial Run with Official example
+## Trial run with official example on PCI-E device
 
 ```shell
 git clone https://github.com/Xilinx/Vitis_Libraries/ 
@@ -12,6 +12,9 @@ source vlib.sh                                               # the setting file 
 make host xclbin TARGET=sw_emu                               # combpile for Software emulation 
 make run TARGET=sw_emu                                       # run the software emulation 
 ```
+
+For hardware emulation or hardware run, change sw_emu to hw_emu / hw . </br>
+For more details, see the https://github.com/Xilinx/Vitis_Libraries/tree/2020.2/vision/L3 
 
 ## Develope outside the Vitis folder using letterbox as a template
 
