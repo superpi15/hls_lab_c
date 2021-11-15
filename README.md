@@ -18,7 +18,7 @@ For more details, see the https://github.com/Xilinx/Vitis_Libraries/tree/2020.2/
 
 ## Develope outside the Vitis folder using letterbox as a template
 
-Need to configure paths in Makefile 
+It requires modifiying paths used in Makefile. 
 
 For example, XF_PROJ_ROOT should be specified by export, otherwise it will perform auto detection which may get wrong result. 
 ```shell
