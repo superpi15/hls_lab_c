@@ -18,7 +18,7 @@
 #include "xf_blobfromimage_config.h"
 
 #include <sys/time.h>
-#include <stdlib>
+#include <stdlib.h>
 
 #include "xcl2.hpp"
 #include "xf_opencl_wrap.hpp"
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
     int roi_posx = rand()%(resize_width - out_width);
     int roi_posy = rand()%(resize_height - out_height);
     // Generate doFlip indicating whether to flip the image
-    bool doFlip = (rand()%2)==0;
+    int doFlip = (rand()%4)-1; // -1: flip-y-axis, 0: flip-x-axis, 1: flip-xy, 2: no flip
 
     result_hls.create(cv::Size(out_width, out_height), CV_8UC3);
 

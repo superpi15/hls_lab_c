@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#ifndef _XF_CONFIG_PARAMS_
+#define _XF_CONFIG_PARAMS_
 // Max image resoultion
 
 // Enable or disable channel Swap
@@ -49,3 +51,4 @@ static constexpr int NEWHEIGHT = 300;
 static constexpr int MAXDOWNSCALE = 9;
 
 static constexpr int INTERPOLATION = 1;
+#endif

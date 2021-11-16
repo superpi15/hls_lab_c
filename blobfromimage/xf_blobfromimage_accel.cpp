@@ -15,6 +15,7 @@
  */
 
 #include "xf_blobfromimage_config.h"
+#include "xf_flip_config.h"
 
 extern "C" {
 void blobfromimage_accel(ap_uint<INPUT_PTR_WIDTH>* img_inp,  // Input image pointer
@@ -30,7 +31,7 @@ void blobfromimage_accel(ap_uint<INPUT_PTR_WIDTH>* img_inp,  // Input image poin
                          int out_img_linestride, // Final Output image line stride
                          int roi_posx,
                          int roi_posy,
-                         bool doFlip) {
+                         int doFlip) {
 // clang-format off
 #pragma HLS INTERFACE m_axi     port=img_inp  offset=slave bundle=gmem1
 #pragma HLS INTERFACE m_axi     port=img_out  offset=slave bundle=gmem2
@@ -52,8 +53,7 @@ void blobfromimage_accel(ap_uint<INPUT_PTR_WIDTH>* img_inp,  // Input image poin
 #pragma HLS stream variable = imgInput.data depth = 2
 
     // Generate random numbers to decide whether to flip, and the position to crop
-    // bool doFlip = true; //TODO: change this to a randomly generated value
-    
+
 
 
 #if BGR2RGB
@@ -84,12 +84,6 @@ void blobfromimage_accel(ap_uint<INPUT_PTR_WIDTH>* img_inp,  // Input image poin
     xf::cv::resize<INTERPOLATION, IN_TYPE, HEIGHT, WIDTH, NEWHEIGHT, NEWWIDTH, NPC, MAXDOWNSCALE>(imgInput,resize_out_mat);
 #endif
 
-if(doFlip) {
-    xf::cv::Mat<OUT_TYPE, NEWHEIGHT, NEWWIDTH, NPC> flip_mat(resize_height, resize_width);
-    //TODO: call flip
-
-}
-
 #if CROP
     xf::cv::crop<OUT_TYPE, NEWHEIGHT, NEWWIDTH, 0, NPC>(resize_out_mat, crop_mat, roi);
     xf::cv::preProcess<IN_TYPE, OUT_TYPE, NEWHEIGHT, NEWWIDTH, NPC, WIDTH_A, IBITS_A, WIDTH_B, IBITS_B, WIDTH_OUT,
@@ -101,8 +95,15 @@ if(doFlip) {
 
 #endif
 
+    if(doFlip<2){
+        ap_uint<OUTPUT_PTR_WIDTH> flip_in[ NEWHEIGHT * NEWWIDTH ];
+        xf::cv::xfMat2Array<OUTPUT_PTR_WIDTH, OUT_TYPE, NEWHEIGHT, NEWWIDTH, NPC>(out_mat, flip_in, out_img_linestride);
+        xf::cv::flip<OUTPUT_PTR_WIDTH, OUT_TYPE, NEWHEIGHT, NEWWIDTH, NPC>(flip_in, img_out, out_img_height, out_img_width, doFlip);
+    } else {
+        xf::cv::xfMat2Array<OUTPUT_PTR_WIDTH, OUT_TYPE, NEWHEIGHT, NEWWIDTH, NPC>(out_mat, img_out, out_img_linestride);
+    }
+    
 
 
-    xf::cv::xfMat2Array<OUTPUT_PTR_WIDTH, OUT_TYPE, NEWHEIGHT, NEWWIDTH, NPC>(out_mat, img_out, out_img_linestride);
 }
 }
