@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
     int roi_posx = rand()%(resize_width - out_width);
     int roi_posy = rand()%(resize_height - out_height);
     // Generate doFlip indicating whether to flip the image
-    int doFlip = (rand()%4)-1; // -1: flip-y-axis, 0: flip-x-axis, 1: flip-xy, 2: no flip
+    bool doFlip = rand()%2;
 
     result_hls.create(cv::Size(out_width, out_height), CV_8UC3);
 
@@ -98,7 +98,10 @@ int main(int argc, char* argv[]) {
     cv::Rect myROI(roi_posx, roi_posy, out_width, out_height);
     cv::Mat result_ocv_crop_orr = result_ocv(myROI);
     cv::Mat result_ocv_crop;
-    result_ocv_crop_orr.copyTo(result_ocv_crop); // Need to this to properly access the pixel data
+    if( doFlip )
+        cv::flip(result_ocv_crop_orr, result_ocv_crop, 0);
+    else
+        result_ocv_crop_orr.copyTo(result_ocv_crop); // Need to this to properly access the pixel data
     cv::imwrite("cv_crop.png", result_ocv_crop);
     uchar* img_ocv_data = result_ocv_crop.data;
     int frame_cntr1 = 0;
