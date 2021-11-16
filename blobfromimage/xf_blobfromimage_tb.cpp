@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
     cv::Mat result_ocv_crop_orr = result_ocv(myROI);
     cv::Mat result_ocv_crop;
     if( doFlip )
-        cv::flip(result_ocv_crop_orr, result_ocv_crop, 0);
+        cv::flip(result_ocv_crop_orr, result_ocv_crop, 1);
     else
         result_ocv_crop_orr.copyTo(result_ocv_crop); // Need to this to properly access the pixel data
     cv::imwrite("cv_crop.png", result_ocv_crop);

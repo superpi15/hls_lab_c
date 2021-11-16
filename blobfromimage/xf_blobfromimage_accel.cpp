@@ -98,7 +98,7 @@ void blobfromimage_accel(ap_uint<INPUT_PTR_WIDTH>* img_inp,  // Input image poin
     if(doFlip){
         ap_uint<OUTPUT_PTR_WIDTH> flip_in[ NEWHEIGHT * NEWWIDTH ];
         xf::cv::xfMat2Array<OUTPUT_PTR_WIDTH, OUT_TYPE, NEWHEIGHT, NEWWIDTH, NPC>(out_mat, flip_in, out_img_linestride);
-        xf::cv::flip<OUTPUT_PTR_WIDTH, OUT_TYPE, NEWHEIGHT, NEWWIDTH, NPC>(flip_in, img_out, out_img_height, out_img_width, 0);
+        xf::cv::flip<OUTPUT_PTR_WIDTH, OUT_TYPE, NEWHEIGHT, NEWWIDTH, NPC>(flip_in, img_out, out_img_height, out_img_width, 1);
     } else {
         xf::cv::xfMat2Array<OUTPUT_PTR_WIDTH, OUT_TYPE, NEWHEIGHT, NEWWIDTH, NPC>(out_mat, img_out, out_img_linestride);
     }
