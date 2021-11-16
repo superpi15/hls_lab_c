@@ -29,7 +29,8 @@ void blobfromimage_accel(ap_uint<INPUT_PTR_WIDTH>* img_inp,  // Input image poin
                          int out_img_height,     // Final Output image height
                          int out_img_linestride, // Final Output image line stride
                          int roi_posx,
-                         int roi_posy) {
+                         int roi_posy,
+                         bool doFlip) {
 // clang-format off
 #pragma HLS INTERFACE m_axi     port=img_inp  offset=slave bundle=gmem1
 #pragma HLS INTERFACE m_axi     port=img_out  offset=slave bundle=gmem2
@@ -51,12 +52,8 @@ void blobfromimage_accel(ap_uint<INPUT_PTR_WIDTH>* img_inp,  // Input image poin
 #pragma HLS stream variable = imgInput.data depth = 2
 
     // Generate random numbers to decide whether to flip, and the position to crop
-    bool doFlip = true; //TODO: change this to a randomly generated value
-    xf::cv::Rect_<unsigned int> roi;
-    roi.x = 1;//TODO: change to a random number < cols_in - out_img_height
-    roi.y = 2;//TODO: change to a random number < rows_in - out_img_width
-    roi.height = out_img_height;
-    roi.width = out_img_width;
+    // bool doFlip = true; //TODO: change this to a randomly generated value
+    
 
 
 #if BGR2RGB
@@ -66,6 +63,11 @@ void blobfromimage_accel(ap_uint<INPUT_PTR_WIDTH>* img_inp,  // Input image poin
     
 
 #if CROP
+    xf::cv::Rect_<unsigned int> roi;
+    roi.x = roi_posx;
+    roi.y = roi_posy;
+    roi.height = out_img_height;
+    roi.width = out_img_width;
     xf::cv::Mat<OUT_TYPE, NEWHEIGHT, NEWWIDTH, NPC> crop_mat(out_img_height, out_img_width);
 #endif
     xf::cv::Mat<OUT_TYPE, NEWHEIGHT, NEWWIDTH, NPC> out_mat(out_img_height, out_img_width);
@@ -79,13 +81,13 @@ void blobfromimage_accel(ap_uint<INPUT_PTR_WIDTH>* img_inp,  // Input image poin
     xf::cv::bgr2rgb<IN_TYPE, OUT_TYPE, HEIGHT, WIDTH, NPC>(imgInput, ch_swap_mat);
     xf::cv::resize<INTERPOLATION, IN_TYPE, HEIGHT, WIDTH, NEWHEIGHT, NEWWIDTH, NPC, MAXDOWNSCALE>(ch_swap_mat,
 #else
-    xf::cv::resize<INTERPOLATION, IN_TYPE, HEIGHT, WIDTH, NEWHEIGHT, NEWWIDTH, NPC, MAXDOWNSCALE>(imgInput,
+    xf::cv::resize<INTERPOLATION, IN_TYPE, HEIGHT, WIDTH, NEWHEIGHT, NEWWIDTH, NPC, MAXDOWNSCALE>(imgInput,resize_out_mat);
 #endif
 
 if(doFlip) {
     xf::cv::Mat<OUT_TYPE, NEWHEIGHT, NEWWIDTH, NPC> flip_mat(resize_height, resize_width);
     //TODO: call flip
-    
+
 }
 
 #if CROP
