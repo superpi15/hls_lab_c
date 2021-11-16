@@ -18,6 +18,7 @@
 #include "xf_blobfromimage_config.h"
 
 #include <sys/time.h>
+#include <stdlib>
 
 #include "xcl2.hpp"
 #include "xf_opencl_wrap.hpp"
@@ -57,8 +58,14 @@ int main(int argc, char* argv[]) {
     int resize_height = 300;
     int resize_width = 300;
 
-    int roi_posx = 10;
-    int roi_posy = 10;
+    // Change the roi positions to random values
+    // roi_posx should < resize_width - out_width
+    // roi_posy should < resize_height - out_height
+    srand(0);
+    int roi_posx = rand()%(resize_width - out_width);
+    int roi_posy = rand()%(resize_height - out_height);
+    // Generate doFlip indicating whether to flip the image
+    bool doFlip = (rand()%2)==0;
 
     result_hls.create(cv::Size(out_width, out_height), CV_8UC3);
 
@@ -75,7 +82,7 @@ int main(int argc, char* argv[]) {
     (void)cl_kernel_mgr::registerKernel(
         "blobfromimage_accel", "krnl_blobfromimage_accel", XCLIN(img), XCLOUT(result_hls),
         XCLIN(params, 6 * sizeof(float)), XCLIN(in_width), XCLIN(in_height), XCLIN(in_stride), XCLIN(resize_width),
-        XCLIN(resize_height), XCLIN(out_width), XCLIN(out_height), XCLIN(out_width), XCLIN(roi_posx), XCLIN(roi_posy));
+        XCLIN(resize_height), XCLIN(out_width), XCLIN(out_height), XCLIN(out_width), XCLIN(roi_posx), XCLIN(roi_posy), XCLIN(doFlip));
     cl_kernel_mgr::exec_all();
     /////////////////////////////////////// end of CL
     //////////////////////////////////////////
