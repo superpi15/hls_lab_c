@@ -38,4 +38,11 @@ CXXFLAGS += -I$(XFLIB_DIR)/ext/xcl2/
 CXXFLAGS += -I$(XFLIB_DIR)/L1/include
 ```
 
+## Use L2/flip from 2021 in 2020.2 environment 
+
+* Add: L1/include/imgproc/xf_flip.hpp 
+* Replace: L1/include/common/xf_structs.hpp
+  * for newer class definition
+  * to eliminate the error: 207-3818] using declaration refers into 'MMIter<32, 9, 1, 3840, 1, -1>::', which is not a base class of 'MMIterOut<32, 9, 1, 3840, 1, 1, -1>': /mnt/HLSNAS/hilbertz/vitis_lib/Vitis_Libraries/vision/L1/include/common/xf_structs.hpp:1286:11
+
 
